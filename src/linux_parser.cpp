@@ -252,7 +252,7 @@ string LinuxParser::User(int pid) {
         }
       }
       if (tokens[2] == uid) {
-        return tokens[0];
+        return tokens[0] + "    ";
       }
     }
   }
@@ -267,17 +267,19 @@ long LinuxParser::UpTime(int pid) {
   string line;
   vector<string> tokens;
   string token;
-  double starttime;
-  std::ifstream stream(kProcDirectory + kPidDirectory + kUptimeFilename);
+  long starttime;
+  std::ifstream stream(kProcDirectory + kPidDirectory + kStatFilename);
   if (stream.is_open()) {
     std::getline(stream, line);
     std::istringstream  tokenStream(line);
     while (std::getline(tokenStream, token, ' ')) {
       tokens.push_back(token);
     }
+  } else {
+    throw "Open file failed!";
   }
-  starttime = std::stod(tokens[22 -1]) / sysconf(_SC_CLK_TCK);
-  return (long) starttime;
+  starttime = stol(tokens[21]);
+  return starttime / sysconf(_SC_CLK_TCK);
 }
 
 float LinuxParser::CpuUtilization(int pid) {
