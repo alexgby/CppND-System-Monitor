@@ -1,6 +1,5 @@
 #include "processor.h"
 #include "linux_parser.h"
-#include <iostream>
 #include <string>
 
 using namespace std;
